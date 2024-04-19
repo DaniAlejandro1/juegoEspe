@@ -2,22 +2,3 @@
     margin: 0;
     padding: 0;
 }
-.personaje {
-    position: relative;
-    background-color: red;
-    border: none;
-    padding: 20px;
-    width: 8px;
-    margin-top: 680px;
-}
-.area-de-combate {
-    background-color: white;
-    border: 2px solid black;
-    width: 1380px;
-    height: 720px;
-    margin: 0 auto;
-    margin-top: 8px;
-}
-.barra-de-vida {
-    
-}
