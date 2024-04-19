@@ -2,3 +2,9 @@
     margin: 0;
     padding: 0;
 }
+canvas {
+    margin: auto 0;
+    margin-left: 60px;
+    border: 2px solid black;
+    margin-top: 8px;
+}
