@@ -1,46 +1,52 @@
 class Personaje {
-    constructor(name, health, damage) {
+    constructor(name, health, damage, posX, canvas) {
         this.name = name;
         this.health = health;
         this.maxhealth = health;
         this.damage = damage;
+        this.posX = posX;
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
     }
-    estaVivo() {
-        return this.health > 0;
+    dibujar() {
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillRect(this.posX, canvas.height-160, 80, 160);
     }
-    mover() {
-
+    actualizarPos(posX) {
+        this.posX += posX;
     }
 }
 
-const jugador1 = new Personaje("Jugador", 100, 10, 120);
-const jugador2 = new Personaje("Jugador", 100, 10, 800);
-
-let jugadorX = 0;
-
 const canvas = document.getElementById("canva");
-const ctx = canvas.getContext("2d");
 
-document.addEventListener("keydown", function(event) {
-    if (event.key === "a") {
-        jugadorX -=10
+const jugador = new Personaje("Jugador", 100, 10, 120, canvas);
+const enemigo = new Personaje("Jugador", 100, 10, 600, canvas);
+
+document.addEventListener("keydown", event => {
+    if(event.key == "a" && jugador.posX >= 10) {
+        jugador.actualizarPos(-10);
     }
-    if (event.key === "d") {
-        jugadorX +=10
+    if(event.key == "d" && jugador.posX <= canvas.width-90) {
+        jugador.actualizarPos(10);
+    }
+    if(event.key == "ArrowLeft" && enemigo.posX >= 10) {
+        enemigo.actualizarPos(-10);
+    }
+    if(event.key == "ArrowRight" && enemigo.posX <= canvas.width-90) {
+        enemigo.actualizarPos(10);
     }
 });
 
-function dibujar(posX) {
-    ctx.beginPath();
-    ctx.rect(posX, 560, 80, 160);
-    ctx.stroke();
+function dibujar() {
+    canvas.width = canvas.width;
+
+    jugador.dibujar();
+    enemigo.dibujar();
 }
 
 function update() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    dibujar(jugadorX);
+    dibujar();
+    window.requestAnimationFrame(update);
 }
 
-setInterval(function() {
-    update();
-}, 16);
+update();
