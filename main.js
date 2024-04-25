@@ -1,50 +1,145 @@
+const canvas = document.getElementById("canva");
+ctx = canvas.getContext('2d')
+
 class Personaje {
+    constructor(name, health, damage, posX) {
+        this.name = name;
+        this.health = health;
+        this.maxhealth = health;
+        this.damage = damage;
+        this.posX = posX;
+        this.isAttacking = false;
+        
+        this.velocity = 0;
+        this.weapon = { dimentions : {maxLen: 200, minLen: 40, height: 40, len: 40},
+        positions : {x : this.posX + 20, y : canvas.height-110}};
+        
+    }
+
+    async attack(num) {
+       
+
+       switch(this.isAttacking){
+        case true:
+            if(this.weapon.dimentions.len >= this.weapon.dimentions.maxLen){
+                this.isAttacking = false;
+
+            }else{
+ 
+                this.weapon.dimentions.len += num;
+            }
+
+            break;
+        case false:
+            if(this.weapon.dimentions.len > this.weapon.dimentions.minLen){
+                this.weapon.dimentions.len -= num;
+            }
+            break
+       }
+
+
+        
+    }
+
     
+                
+    update() {
+        
+        this.attack(15)
+        this.posX += this.velocity
+        this.weapon.positions.x += this.velocity
+        
+
+        if (this.posX < 0){
+            this.velocity = 0
+            this.posX = 0
+            this.weapon.positions.x = this.posX + 20
+        }
+        
+        if(this.posX > canvas.width-80){
+            this.velocity = 0
+            this.posX = canvas.width-80
+            this.weapon.positions.x = this.posX + 20
+        }
+        
+        ctx.fillRect(this.posX, canvas.height-160, 80, 160);
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(this.weapon.positions.x,this.weapon.positions.y,this.weapon.dimentions.len,this.weapon.dimentions.height)
+
+        
+    }
     
+
 }
 
-const canvas = document.getElementById("canva")
 
-const ctx = canvas.getContext("2d")
+const jugador = new Personaje("Jugador", 100, 120,100);
+const enemigo = new Personaje("Jugador", 100, 600,1000);
 
 
-const pieza = {
-    position: {x: 0, y: canvas.height-160},
-    dimentions:{w: 80, h: 160}
-}
-
-const jugador1 = new Personaje("Jugador", 100, 10, 120)
-
-let jugadorX = 10;
 
 
 
 document.addEventListener("keydown", event =>{
-    if(event.key == "a"){
-        pieza.position.x-=10
-        if(pieza.position.x < 0) pieza.position.x+=10
-        console.log("izquierda")
-    }
-    if(event.key == "d"){
-        pieza.position.x+=10 
-        if(pieza.position.x > canvas.width-pieza.dimentions.w) pieza.position.x-=10
-        console.log("derecha")
-    }
+    if(event.key == "e") jugador.isAttacking = true
+    
+})
+
+document.addEventListener("keyup", event =>{
+    if(event.key == "e") jugador.isAttacking = false
+    
+})
+
+document.addEventListener("keydown", event =>{
+    if(event.key == "m") enemigo.isAttacking = true
+    
+})
+
+document.addEventListener("keyup", event =>{
+    if(event.key == "m") enemigo.isAttacking = false
+    
 })
 
 
-function update(){
+document.addEventListener("keypress", event => {
+    if (event.key == "a") jugador.velocity = -5
+    if (event.key == "d") jugador.velocity = 5
+});
+
+document.addEventListener("keyup", event => {
+    if (event.key == "a") jugador.velocity = 0
+    if (event.key == "d") jugador.velocity = 0
+});
+
+
+document.addEventListener("keydown", event => {
+   
+        if (event.key == "ArrowLeft") enemigo.velocity = -5
+        if (event.key == "ArrowRight") enemigo.velocity = 5
     
-    draw()
-    window.requestAnimationFrame(update)
+});
+
+document.addEventListener("keyup", event => {
+     
+    if (event.key == "ArrowLeft") enemigo.velocity = 0
+    if (event.key == "ArrowRight") enemigo.velocity = 0
+    
+});
+
+
+
+function dibujar() {
+    canvas.width = canvas.width;
+    ctx.fillStyle = 'black';
+    jugador.update();
+    ctx.fillStyle = 'red';
+    enemigo.update();
+
 }
 
-function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = '#000'
-    ctx.fillRect(pieza.position.x, pieza.position.y, pieza.dimentions.w, pieza.dimentions.h);
-    
+function update() {
+    dibujar();
+    window.requestAnimationFrame(update);
 }
 
-
-update()
+update();

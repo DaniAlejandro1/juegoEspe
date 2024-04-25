@@ -29,13 +29,20 @@ document.addEventListener("keydown", event => {
     if(event.key == "d" && jugador.posX <= canvas.width-90) {
         jugador.actualizarPos(10);
     }
+
+});
+
+
+
+
+document.addEventListener("keydown", event =>{
     if(event.key == "ArrowLeft" && enemigo.posX >= 10) {
         enemigo.actualizarPos(-10);
     }
     if(event.key == "ArrowRight" && enemigo.posX <= canvas.width-90) {
         enemigo.actualizarPos(10);
     }
-});
+})
 
 function dibujar() {
     canvas.width = canvas.width;
