@@ -7,7 +7,20 @@
     <title>Pagina</title>
 </head>
 <body>
-    <canvas id="canva" width="1400" height="720"></canvas>
+    <div class="contenedor">
+        <div class="contenedor-barras">
+            <div class="borde-blanco">
+                <div class="vida-vacia"></div>
+                <div id="jugadorVida" class="vida-jugador"></div>
+            </div>
+            <div class="espacio"></div>
+            <div class="borde-blanco">
+                <div class="vida-vacia"></div>
+                <div id="enemigoVida" class="vida-enemigo"></div>
+            </div>
+        </div>
+        <canvas id="canva" width="1400" height="720"></canvas>
+    </div>
     
     <script src="index.js"></script>
 </body>
