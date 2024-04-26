@@ -1,5 +1,6 @@
 const canvas = document.getElementById("canva");
 ctx = canvas.getContext('2d')
+TIEMPO_ESPERA = 700
 
 class Personaje {
     constructor(name, health, damage, posX,sentido) {
@@ -36,38 +37,24 @@ class Personaje {
     update() {
         
         this.attack(15)
-        this.posX += this.velocity
-        this.weapon.positions.x += this.velocity
-        
-
-        if (this.posX < 0){
-            this.velocity = 0
-            this.posX = 0
-            this.weapon.positions.x = this.posX + 40
-        }
-        
-        if(this.posX > canvas.width-80){
-            this.velocity = 0
-            this.posX = canvas.width-80
-            this.weapon.positions.x = this.posX + 40
-        }
-        
-        ctx.fillRect(this.posX, canvas.height-160, 80, 160);
-        ctx.fillStyle = 'blue';
-        if(this.sentido === 1)ctx.fillRect(this.weapon.positions.x,this.weapon.positions.y,this.weapon.dimentions.len,this.weapon.dimentions.height);
-        if(this.sentido === -1)ctx.fillRect(this.weapon.positions.x,this.weapon.positions.y,-this.weapon.dimentions.len,this.weapon.dimentions.height);
-
+       
     }
 }
 
 const jugador = new Personaje("Jugador", 100, 1,100,1);
+let ultimoDisparoPersonaje = Date.now();
 const enemigo = new Personaje("Enemigo", 100, 1,1000,-1);
+let ultimoDisparoEnemigo = Date.now();
 
 
 //Ataque del jugador
 document.addEventListener("keydown", event => {
-    
-    if(event.key == "e") jugador.isAttacking = true   
+    const tiempoActual = Date.now() 
+    if(event.key == "e") if(tiempoActual - ultimoDisparoPersonaje > TIEMPO_ESPERA){
+
+        jugador.isAttacking = true;
+        ultimoDisparoPersonaje = Date.now();
+    }
 })
 
 document.addEventListener("keyup", event => {
@@ -77,7 +64,11 @@ document.addEventListener("keyup", event => {
 
 //Ataque del enemigo
 document.addEventListener("keydown", event => {
-    if(event.key == "m") enemigo.isAttacking = true    
+    const tiempoActual = Date.now()
+    if(event.key == "m") if(tiempoActual-ultimoDisparoEnemigo > TIEMPO_ESPERA){
+        enemigo.isAttacking = true    
+        ultimoDisparoEnemigo = Date.now()
+    }
 })
 
 document.addEventListener("keyup", event => {
@@ -116,6 +107,30 @@ function comprobarColision(atacante, objetivo) {
     return anchoArma >= objetivoPosicion && posicionArma <= anchoObjetivo;
 }
 
+function moverJugador(character,s,color){
+    character.posX += character.velocity
+    character.weapon.positions.x += character.velocity
+    
+    
+    if (character.posX < 0){
+        character.velocity = 0
+        character.posX = 0
+        character.weapon.positions.x = character.posX + 40
+    }
+    
+    if(character.posX > canvas.width-80){
+        character.velocity = 0
+        character.posX = canvas.width-80
+        character.weapon.positions.x = character.posX + 40
+    }
+    
+    ctx.fillStyle = color
+    ctx.fillRect(character.posX, canvas.height-160, 80, 160);
+    ctx.fillStyle = 'red';
+
+    ctx.fillRect(character.weapon.positions.x,character.weapon.positions.y,(s)*(character.weapon.dimentions.len),character.weapon.dimentions.height);
+}
+
 function dibujar() {
     canvas.width = canvas.width;
     ctx.fillStyle = 'black';
@@ -126,7 +141,8 @@ function dibujar() {
 
 function update() {
     dibujar();
-  
+    moverJugador(jugador,1,"blue")
+    moverJugador(enemigo,-1,"black")
     let posicionArmaEnemiga = enemigo.posX-enemigo.weapon.dimentions.len;
     let posicionArmaJugador = jugador.weapon.positions.x + jugador.weapon.dimentions.len
     if(posicionArmaEnemiga < jugador.posX+20) {
