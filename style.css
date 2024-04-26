@@ -15,6 +15,10 @@ canvas {
     position: relative; 
     display: inline-block;
 }
+.vida{
+    color: white;
+    margin-right: 20px;
+}
 .contenedor-barras {
     position: absolute;
     display: flex;

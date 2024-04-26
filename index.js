@@ -111,7 +111,7 @@ function moverJugador(character,s,color){
     character.posX += character.velocity
     character.weapon.positions.x += character.velocity
     
-    
+
     if (character.posX < 0){
         character.velocity = 0
         character.posX = 0
@@ -131,6 +131,13 @@ function moverJugador(character,s,color){
     ctx.fillRect(character.weapon.positions.x,character.weapon.positions.y,(s)*(character.weapon.dimentions.len),character.weapon.dimentions.height);
 }
 
+function reset(){
+    jugador = new Personaje("Jugador", 100, 1,100,1);
+    ultimoDisparoPersonaje = Date.now();
+    enemigo = new Personaje("Enemigo", 100, 1,1000,-1);
+    ultimoDisparoEnemigo = Date.now();
+}
+
 function dibujar() {
     canvas.width = canvas.width;
     ctx.fillStyle = 'black';
@@ -140,6 +147,11 @@ function dibujar() {
 }
 
 function update() {
+
+    if(enemigo.health<0){
+        location.reload()        
+    }
+
     dibujar();
     moverJugador(jugador,1,"blue")
     moverJugador(enemigo,-1,"black")
@@ -149,14 +161,19 @@ function update() {
         console.log("enemigo ataca a jugador")
         jugador.health -= enemigo.damage;
         document.querySelector('#jugadorVida').style.width = jugador.health + '%';
+        document.querySelector('#VidaJugador').innerHTML = jugador.health
     }
     if(posicionArmaJugador > enemigo.posX){
         console.log("Jugador ataca a enemigo")
         enemigo.health -= jugador.damage;
         document.querySelector('#enemigoVida').style.width = enemigo.health + '%';
+        document.querySelector('#VidaEnemigo').innerHTML = enemigo.health
+
+
     }
     
     window.requestAnimationFrame(update);
 }
+
 
 update();
