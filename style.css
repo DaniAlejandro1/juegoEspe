@@ -9,6 +9,7 @@ canvas {
     margin: auto 0;
     margin-left: 60px;
     margin-top: 8px;
+    border: 1px solid black
 }
 .contenedor {
     position: relative; 
@@ -22,7 +23,7 @@ canvas {
 }
 .vida-jugador {
     position: absolute;
-    background: yellow;
+    background: rgb(27, 175, 20);
     top: 0;
     bottom: 0;
     width: 100%;
@@ -30,7 +31,7 @@ canvas {
 }
 .vida-enemigo {
     position: absolute;
-    background: yellow;
+    background: rgb(27, 175, 20);
     top: 0;
     bottom: 0;
     right: 0;
